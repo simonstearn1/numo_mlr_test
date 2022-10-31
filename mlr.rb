@@ -34,7 +34,7 @@ class MLR
     moment_v_coef = Numo::DFloat.zeros(coef.shape)
     t = 0
 
-    while true do
+    loop do
       error = mse(coef, x, y)
 
       return coef if (error - prev_error).abs <= epsilon
