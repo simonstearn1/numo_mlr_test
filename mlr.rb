@@ -1,6 +1,14 @@
 require "numo/narray"
 
 class MLR
+
+  class DataShapeError < ArgumentError
+    def initialize(msg="Data shape must be consistent (dimensions vs coefficients & x vs y length)", exception_type="custom")
+      @exception_type = exception_type
+      super(msg)
+    end
+  end
+
   # For testing
   def generate_dataset(n)
     x = []
@@ -27,6 +35,11 @@ class MLR
 
 
   def multilinear_regression(coef, x, y, lr, b1=0.9, b2=0.999, epsilon=1e-8)
+
+    unless x.shape[0] == y.shape[0] && x.shape[1] == coef.shape[0]
+      raise DataShapeError
+    end
+
     prev_error = 0
     m_coef = Numo::DFloat.zeros(coef.shape)
     v_coef = Numo::DFloat.zeros(coef.shape)
